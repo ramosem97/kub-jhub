@@ -1,0 +1,73 @@
+# This file can update the JupyterHub Helm chart's default configuration values.
+#
+# For reference see the configuration reference and default values, but make
+# sure to refer to the Helm chart version of interest to you!
+#
+# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
+# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
+# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+# Available chart versions: https://jupyterhub.github.io/helm-chart/
+
+hub:
+  config:
+    Authenticator:
+      admin_users:
+        - admin
+      allowed_users:
+        - jupy
+  # my_config:
+      # mountPath: /jhub_config/my_jupyterhub_config.py
+    DummyAuthenticator:
+      password: hola
+    JupyterHub:
+      authenticator_class: dummy
+
+singleuser:
+  defaultUrl: "/lab"
+  memory:
+    limit: 10G
+    guarantee: 5G
+  storage:
+    type: dynamic
+    dynamic:
+      storageClass: standard
+  image:
+    # You should replace the "latest" tag with a fixed version from:
+    # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
+    # Inspect the Dockerfile at:
+    # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
+    name: jupyter/all-spark-notebook 
+    tag: latest
+    args:
+      - jupyterhub-singleuser
+      - '--ip=0.0.0.0'
+      - '--port=8888'
+    ports:
+      - name: notebook-port
+        containerPort: 8888
+        protocol: TC
+    env:
+      JUPYTERHUB_BASE_URL:
+    
+        
+  profileList:
+    - display_name: "Base Enviroment"
+      description: "Base Enviroment for Jupyter Lab"
+      default: true
+      defaultUrl: "/lab"
+      extraEnv:
+        EDITOR: "vim"
+
+      lifecycleHooks:
+        postStart:
+          exec:
+            command:
+            - "/bin/bash"
+            - "-c"
+            - >
+              start.sh jupyter lab --LabApp.token='password' --LabApp.ip='0.0.0.0' --LabApp.allow_root=True
+
+proxy:
+  service:
+    type: ClusterIP
+  secretToken: "hola_st" ## <<Change the token to your random hex string from Step 1>>
