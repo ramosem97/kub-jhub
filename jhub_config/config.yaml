@@ -36,20 +36,18 @@ singleuser:
     # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
     # Inspect the Dockerfile at:
     # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
-    name: jupyter/all-spark-notebook 
+    name: ramosem97/kub-jhub
     tag: latest
-    args:
-      - jupyterhub-singleuser
-      - '--ip=0.0.0.0'
-      - '--port=8888'
-    ports:
-      - name: notebook-port
-        containerPort: 8888
-        protocol: TC
-    env:
-      JUPYTERHUB_BASE_URL:
-    
-        
+    # args:
+    #   - jupyterhub-singleuser
+    #   - '--ip=0.0.0.0'
+    #   - '--port=8888'
+    # ports:
+    #   - name: notebook-port
+    #     containerPort: 8888
+    #     protocol: TC
+    # env:
+    #   JUPYTERHUB_BASE_URL:
   profileList:
     - display_name: "Base Enviroment"
       description: "Base Enviroment for Jupyter Lab"

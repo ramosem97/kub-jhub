@@ -1,1 +1,1 @@
-helm upgrade --cleanup-on-fail --install jhub jupyterhub/jupyterhub --namespace jhub --version=1.0.1 --values Kubernetes/kubernetes-jupyterhub/config.yaml
+helm upgrade --cleanup-on-fail --install jhub jupyterhub/jupyterhub --namespace jhub --version=1.0.1 --values jhub_config/config.yaml
